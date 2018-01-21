@@ -3,9 +3,12 @@ package com.example.androidstarter;
 
 import android.app.Application;
 
+import com.example.androidstarter.data.api.RetrofitClient;
+import com.example.androidstarter.data.api.UtilsApi;
 import com.example.androidstarter.data.database.AppDatabase;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
+import retrofit2.Retrofit;
 import timber.log.Timber;
 
 /**
@@ -13,6 +16,8 @@ import timber.log.Timber;
  */
 
 public class MyApplication extends Application {
+
+    boolean serverlessRetrofit = true;
 
     @Override
     public void onCreate() {
@@ -26,6 +31,10 @@ public class MyApplication extends Application {
 
     public AppDatabase getDatabase() {
         return AppDatabase.getInstance(this);
+    }
+
+    public Retrofit getRetrofit() {
+        return RetrofitClient.getClient(UtilsApi.BASE_URL_API);
     }
 
 }

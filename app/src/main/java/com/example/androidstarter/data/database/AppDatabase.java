@@ -50,7 +50,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         super.onCreate(db);
-                        new DatabaseAsync(appContext).execute();
+                        //new DatabaseAsync(appContext).execute();
                     }
                 }).build();
     }
@@ -77,7 +77,7 @@ public abstract class AppDatabase extends RoomDatabase {
             setDatabaseCreated();
         }
     }
-
+/*
     private static class DatabaseAsync extends AsyncTask<Void, Void, Void> {
         private Context mContext;
 
@@ -110,6 +110,6 @@ public abstract class AppDatabase extends RoomDatabase {
             //To after addition operation here.
         }
     }
-
+*/
 }
 
