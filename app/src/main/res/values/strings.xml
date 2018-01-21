@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">Android Starter</string>
     <string name="action_settings">Settings</string>
+    <!--null_state_view.xml-->
+    <string name="null_state_image_content_description">No Data Available</string>
+    <string name="tasks_empty">Yay! No tasks to do!</string>
+    <string name="tasks_empty_description">There are no active tasks available to show.
+        \nWhy not create some more? \nOr simply relax!</string>
+    <string name="add_task">Create a Task</string>
+    <string name="network_error">Oops! Bad Network :(</string>
+    <string name="network_error_description">Something seems to be wrong with network.
+        \nConfirm your internet connectivity and try again.</string>
+    <string name="retry">Retry</string>
 </resources>

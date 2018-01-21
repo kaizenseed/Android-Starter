@@ -15,4 +15,6 @@
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
 
+    <include layout="@layout/null_state_view"/>
+
 </android.support.constraint.ConstraintLayout>

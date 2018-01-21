@@ -1,6 +1,7 @@
 package com.example.androidstarter.tasks;
 
 import com.example.androidstarter.base.BasePresenter;
+import com.example.androidstarter.custom.DataStateViewChanges;
 import com.example.androidstarter.data.models.Task;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  */
 
 public interface TasksContract {
-    interface View {
+    interface View extends DataStateViewChanges {
         void showTasks(List<Task> tasks);
     }
 

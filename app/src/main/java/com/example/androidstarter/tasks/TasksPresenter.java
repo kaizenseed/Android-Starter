@@ -7,6 +7,7 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.example.androidstarter.custom.DataViewState;
 import com.example.androidstarter.data.database.AppDatabase;
 import com.example.androidstarter.data.models.Task;
 
@@ -63,12 +64,6 @@ public class TasksPresenter implements TasksContract.Presenter, LifecycleObserve
     public void loadTasks(boolean onlineRequired) {
         Timber.d("in loadTasks");
         //query db for tasks
-        //ToNote - maybe this should be done in background but for now just calling directly
-        //since sample data size is expected to be small
-
-        if (instance == null)  {
-            return; // this is error. todo Communicate better
-        }
         new QueryAsync(appDatabase, tasksView).execute();
     }
 
@@ -77,7 +72,7 @@ public class TasksPresenter implements TasksContract.Presenter, LifecycleObserve
         private TasksContract.View tasksView;
 
 
-        public QueryAsync(AppDatabase db, TasksContract.View view) {
+        QueryAsync(AppDatabase db, TasksContract.View view) {
             appDatabase = db;
             tasksView = view;
         }
@@ -95,10 +90,13 @@ public class TasksPresenter implements TasksContract.Presenter, LifecycleObserve
 
         @Override
         protected void onPostExecute(List<Task> taskList) {
-            if (taskList == null || taskList.isEmpty()) {
+            if (taskList == null) {
+                Timber.e("empty task list instance from db");
+                tasksView.switchState(DataViewState.NO_DATA);
                 return; //this is error or no data condition todo communicate better
             }
-            //tasksView.stopLoadingIndicator(); todo handle loading indicator
+            //tasksView.stopLoadingIndicator();
+            // no longer needs to be handled since state changes will be handled in showTasks
             tasksView.showTasks(taskList);
         }
     }
