@@ -3,31 +3,47 @@ package com.example.androidstarter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.androidstarter.base.BaseActivity;
+import com.example.androidstarter.base.activities.BaseActivity;
+import com.example.androidstarter.base.activities.WidgetActivity;
 import com.example.androidstarter.tasks.TasksFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends BaseActivity {
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.fab) FloatingActionButton fab;
-
+public class MainActivity extends WidgetActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        TasksFragment frag = new TasksFragment();
+        setFragment(R.id.fragment, frag, TasksFragment.class.getSimpleName(), true);
+    }
+
+    public boolean fabExists() {
+        return false;
+    }
+
+    public boolean toolbarExists() {
+        return true;
+    }
+
+    public boolean navDrawerExists() {
+        return false;
+    }
+
+    public boolean rightNavDrawerExists() {
+        return false;
+    }
+
+    public void configureToolbar(){
+    }
+
+    public void configureFab(){
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -35,14 +51,6 @@ public class MainActivity extends BaseActivity {
                         .setAction("Action", null).show();
             }
         });
-
-        TasksFragment frag = new TasksFragment();
-        setFragment(R.id.fragment, frag, TasksFragment.class.getSimpleName(), true);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -72,7 +80,6 @@ public class MainActivity extends BaseActivity {
         String tag = getCurrentTag();
         if (tag == null) {
             super.onBackPressed();
-            return;
         }
         else if (tag.equals(TasksFragment.class.getSimpleName())) {
             finish();

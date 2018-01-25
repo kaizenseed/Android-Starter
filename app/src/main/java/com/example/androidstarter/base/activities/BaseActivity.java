@@ -1,4 +1,4 @@
-package com.example.androidstarter.base;
+package com.example.androidstarter.base.activities;
 
 import android.arch.lifecycle.LifecycleRegistry;
 import android.os.Bundle;

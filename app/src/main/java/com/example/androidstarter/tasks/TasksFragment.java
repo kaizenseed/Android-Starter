@@ -1,6 +1,7 @@
 package com.example.androidstarter.tasks;
 
-import android.arch.lifecycle.LifecycleRegistry;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -14,7 +15,7 @@ import android.widget.TextView;
 
 import com.example.androidstarter.MyApplication;
 import com.example.androidstarter.R;
-import com.example.androidstarter.base.BaseActivity;
+import com.example.androidstarter.base.activities.BaseActivity;
 import com.example.androidstarter.custom.DataViewState;
 import com.example.androidstarter.data.models.Task;
 
@@ -39,6 +40,7 @@ public class TasksFragment extends Fragment implements TasksContract.View {
     TasksAdapter adapter;
 
     DataViewState dataState;
+    String dataViewStateKey = "dataStateKey";
     //todo - check if maintaining DataViewState is actually useful.. maybe in case of config changes?
 
     public TasksFragment() {
@@ -116,5 +118,21 @@ public class TasksFragment extends Fragment implements TasksContract.View {
         statusTextView.setText(R.string.network_error);
         statusDescriptionTextView.setText(R.string.network_error_description);
         actionButtonView.setText(R.string.retry);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        Timber.v("saving fragment state");
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(dataViewStateKey, dataState);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        Timber.v("Restoring fragment state");
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            dataState = (DataViewState) savedInstanceState.get(dataViewStateKey);
+        }
     }
 }

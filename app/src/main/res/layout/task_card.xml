@@ -3,16 +3,16 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="4dp"
+    android:layout_marginTop="1dp"
+    android:layout_marginBottom="1dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="4dp"
+    app:cardElevation="2dp">
 
     <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
@@ -33,7 +33,6 @@
             android:ems="10"
             android:textSize="16sp"
             android:layout_marginStart="5dp"
-            android:text="Organise paperwork"
             app:layout_constraintLeft_toRightOf="@id/status"
             app:layout_constraintBottom_toTopOf="@+id/task_estimate"
             />
@@ -45,7 +44,6 @@
             android:ems="10"
             android:textSize="12sp"
             android:layout_marginStart="10dp"
-            android:text="30 minutes"
             app:layout_constraintLeft_toRightOf="@id/status"
             app:layout_constraintTop_toBottomOf="@id/task_description"
             />
