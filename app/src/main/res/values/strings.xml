@@ -1,6 +1,18 @@
 <resources>
     <string name="app_name">Android Starter</string>
     <string name="action_settings">Settings</string>
+    <!--Material Drawer : Std Nav Drawer-->
+    <string name="menu_tasks">Tasks</string>
+    <string name="menu_filters">Filters</string>
+    <string name="submenu_quick_tasks">Quick Tasks</string>
+    <string name="submenu_quick_tasks_descr">\u003c\u003d 15 minutes</string>
+    <string name="submenu_short_tasks">Short Tasks</string>
+    <string name="submenu_sort_tasks_descr">15 to 45 minutes</string>
+    <string name="submenu_big_tasks">Big Tasks</string>
+    <string name="submenu_big_tasks_descr">\u003e 45 minutes</string>
+    <string name="submenu_unestimated_tasks">Unestimated</string>
+    <string name="submenu_manage_filters">Manage Filters</string>
+    <string name="menu_settings">Settings</string>
     <!--null_state_view.xml-->
     <string name="null_state_image_content_description">No Data Available</string>
     <string name="tasks_empty">Yay! No tasks to do!</string>

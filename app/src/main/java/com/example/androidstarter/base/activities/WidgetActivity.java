@@ -7,6 +7,8 @@ import android.view.View;
 
 import com.example.androidstarter.R;
 import com.example.androidstarter.base.activities.behaviours.WidgetsAvailable;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,5 +40,20 @@ public abstract class WidgetActivity extends BaseActivity implements
         else {
             fab.setVisibility(View.GONE);
         }
+
+        if (toolbarExists() && navDrawerExists()) {
+            configureNavDrawer();
+            //since this is done programmatically, just skip the step if not used
+        }
+    }
+
+    // putting this here instead of in MainActivity as each activity would
+    // in 99% cases at least have a toolbar
+    // possible exceptions could be a splash screen activity, a login activity or any other
+    // activity requiring full screen size available for its fragment
+
+    //however the toolbar configuration may optionally change depending on screen context
+    public boolean toolbarExists() {
+        return true;
     }
 }
