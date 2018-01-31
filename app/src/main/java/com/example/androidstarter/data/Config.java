@@ -5,6 +5,7 @@ package com.example.androidstarter.data;
  */
 
 public class Config {
-    public static final String TASKS_TABLE_NAME = "tasks";
     public static final String DATABASE_NAME = "Starter.db";
+    public static final String TASKS_TABLE_NAME = "tasks";
+    public static final String USERS_TABLE_NAME = "users";
 }

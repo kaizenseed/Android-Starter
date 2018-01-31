@@ -13,8 +13,8 @@ import com.example.androidstarter.data.Config;
 public class Task {
     @PrimaryKey(autoGenerate = true) public long id;
 
-    String description;
-    long estimate; //estimated time to complete in
+    private String description;
+    private long estimate; //estimated time to complete in
 
     public Task(String description, long estimate) {
         this.description = description;

@@ -14,10 +14,13 @@ import timber.log.Timber;
 
 public class MyApplication extends Application {
 
+    private AppDatabase appDatabase;
+
     @Override
     public void onCreate() {
         super.onCreate();
         AndroidThreeTen.init(this);
+        appDatabase = AppDatabase.getInstance(this);
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
@@ -25,7 +28,7 @@ public class MyApplication extends Application {
     }
 
     public AppDatabase getDatabase() {
-        return AppDatabase.getInstance(this);
+        return appDatabase;
     }
 
 }

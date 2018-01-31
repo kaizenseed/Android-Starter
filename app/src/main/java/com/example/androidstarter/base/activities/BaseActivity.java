@@ -22,7 +22,6 @@ import timber.log.Timber;
 public abstract class BaseActivity extends AppCompatActivity {
     private final LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
 
-    MyApplication myApplication;
     private Stack<String> fragmentStack = new Stack<String>();
 
     private static final String fragmentStackStr = "fragmentStack";
