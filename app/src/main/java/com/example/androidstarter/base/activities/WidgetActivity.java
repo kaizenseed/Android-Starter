@@ -2,11 +2,13 @@ package com.example.androidstarter.base.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.example.androidstarter.R;
 import com.example.androidstarter.base.activities.behaviours.WidgetsAvailable;
+//import com.mikepenz.iconics.context.IconicsLayoutInflater2;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 
@@ -24,6 +26,10 @@ public abstract class WidgetActivity extends BaseActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Define IconicsLayoutInflater to enable automatic xml icons detection
+        // see https://github.com/mikepenz/Android-Iconics
+//        LayoutInflaterCompat.setFactory2(getLayoutInflater(),
+//                new IconicsLayoutInflater2(getDelegate()));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
