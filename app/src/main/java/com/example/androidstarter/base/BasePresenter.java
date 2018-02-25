@@ -9,4 +9,5 @@ import android.arch.lifecycle.LifecycleObserver;
 public interface BasePresenter<V> {
     void onAttach();
     void onDetach();
+    void attachView(V view);
 }

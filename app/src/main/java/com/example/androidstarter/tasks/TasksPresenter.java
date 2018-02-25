@@ -39,6 +39,7 @@ public class TasksPresenter implements TasksContract.Presenter, LifecycleObserve
         return instance;
     }
 
+    @Override
     public void attachView(TasksContract.View view) {
         if (tasksView == null) {
             tasksView = view;

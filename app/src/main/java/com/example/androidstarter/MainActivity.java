@@ -32,6 +32,7 @@ public class MainActivity extends WidgetActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Timber.d("in onCreate");
         super.onCreate(savedInstanceState);
 
         TasksFragment frag = new TasksFragment();
@@ -40,7 +41,7 @@ public class MainActivity extends WidgetActivity {
 
     @Override
     public boolean fabExists() {
-        return false;
+        return true;
     }
 
     @Override
@@ -102,10 +103,12 @@ public class MainActivity extends WidgetActivity {
     @Override
     public void onBackPressed() {
         String tag = getCurrentTag();
+        Timber.d("Back pressed with current tag : %s", tag);
         if (tag == null) {
             super.onBackPressed();
         } 
         else if (tag.equals(TasksFragment.class.getSimpleName())) {
+            Timber.d("finish called.");
             finish();
         }
     }

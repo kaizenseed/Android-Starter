@@ -49,6 +49,7 @@ public class TasksFragment extends Fragment implements TasksContract.View {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Timber.d("in onCreateView");
         View view = inflater.inflate(R.layout.fragment_tasks, container, false);
         ButterKnife.bind(this, view);
 
@@ -67,7 +68,7 @@ public class TasksFragment extends Fragment implements TasksContract.View {
 
     @Override
     public void showTasks(List<Task> tasks) {
-        Timber.d("in showTasks");
+        Timber.d("in showTasks, tasks isEmpty : %s", tasks.isEmpty());
         if (tasks.isEmpty()) {
             adapter.clearData();
             // this is no data communication.
@@ -109,12 +110,14 @@ public class TasksFragment extends Fragment implements TasksContract.View {
     }
 
     private void initNoDataAvailable() {
+        Timber.d("No data available. Initialise.");
         statusTextView.setText(R.string.tasks_empty);
         statusDescriptionTextView.setText(R.string.tasks_empty_description);
         actionButtonView.setText(R.string.add_task);
     }
 
     private void initNetworkError() {
+        Timber.d("Network error. Initialise.");
         statusTextView.setText(R.string.network_error);
         statusDescriptionTextView.setText(R.string.network_error_description);
         actionButtonView.setText(R.string.retry);
@@ -122,17 +125,17 @@ public class TasksFragment extends Fragment implements TasksContract.View {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        Timber.v("saving fragment state");
+        Timber.v("saving fragment state as %s", dataState);
         super.onSaveInstanceState(outState);
         outState.putSerializable(dataViewStateKey, dataState);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Timber.v("Restoring fragment state");
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
             dataState = (DataViewState) savedInstanceState.get(dataViewStateKey);
         }
+        Timber.v("Restoring fragment state %s", dataState);
     }
 }

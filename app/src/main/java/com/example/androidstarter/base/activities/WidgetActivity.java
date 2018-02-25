@@ -26,10 +26,6 @@ public abstract class WidgetActivity extends BaseActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //Define IconicsLayoutInflater to enable automatic xml icons detection
-        // see https://github.com/mikepenz/Android-Iconics
-//        LayoutInflaterCompat.setFactory2(getLayoutInflater(),
-//                new IconicsLayoutInflater2(getDelegate()));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
