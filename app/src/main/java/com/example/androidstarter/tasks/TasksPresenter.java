@@ -23,28 +23,32 @@ public class TasksPresenter implements TasksContract.Presenter, LifecycleObserve
     private static TasksPresenter instance;
 
     private AppDatabase appDatabase;
-    private TasksContract.View tasksView;
+    private static TasksContract.View tasksView;
 
     private TasksPresenter(AppDatabase database, TasksContract.View view) {
         Timber.d("TasksPresenter constructor");
-
         appDatabase = database;
-        tasksView = view;
-
-        // Initialize this presenter as a lifecycle-aware when a view is a lifecycle owner.
-        if (tasksView instanceof LifecycleOwner) {
-            ((LifecycleOwner) tasksView).getLifecycle().addObserver(this);
-            Timber.d("TasksPresenter added as observer of %s",
-                    tasksView.getClass().toString());
-        }
-
+        attachView(view);
     }
 
     public  static TasksPresenter getInstance(AppDatabase database, TasksContract.View view) {
-        if (instance == null) {
+        if (instance == null || tasksView == null) {
+            //seems hacky for some reason.. dunno why though
             instance = new TasksPresenter(database, view);
         }
         return instance;
+    }
+
+    public void attachView(TasksContract.View view) {
+        if (tasksView == null) {
+            tasksView = view;
+            // Initialize this presenter as a lifecycle-aware when a view is a lifecycle owner.
+            if (tasksView instanceof LifecycleOwner) {
+                ((LifecycleOwner) tasksView).getLifecycle().addObserver(this);
+                Timber.d("TasksPresenter added as observer of %s",
+                        tasksView.getClass().toString());
+            }
+        }
     }
 
     @Override
@@ -57,7 +61,11 @@ public class TasksPresenter implements TasksContract.Presenter, LifecycleObserve
     @Override
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     public void onDetach() {
-
+        //next time a fresh view ought to be used
+        if (tasksView != null) {
+            ((LifecycleOwner) tasksView).getLifecycle().removeObserver(this);
+            tasksView = null;
+        }
     }
 
     @Override
