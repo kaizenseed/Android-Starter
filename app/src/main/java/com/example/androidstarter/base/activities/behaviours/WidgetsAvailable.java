@@ -12,5 +12,6 @@ public interface WidgetsAvailable {
 
     void configureToolbar();
     void configureFab();
+    void configureNavDrawer();
 
 }
