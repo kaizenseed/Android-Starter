@@ -9,6 +9,7 @@ import android.view.View;
 import com.example.androidstarter.R;
 import com.example.androidstarter.base.activities.behaviours.WidgetsAvailable;
 //import com.mikepenz.iconics.context.IconicsLayoutInflater2;
+import com.mikepenz.iconics.context.IconicsLayoutInflater2;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 
@@ -26,6 +27,7 @@ public abstract class WidgetActivity extends BaseActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LayoutInflaterCompat.setFactory2(getLayoutInflater(), new IconicsLayoutInflater2(getDelegate()));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);

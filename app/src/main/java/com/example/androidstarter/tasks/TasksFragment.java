@@ -87,7 +87,6 @@ public class TasksFragment extends Fragment implements TasksContract.View {
 
     @Override
     public void switchState(DataViewState newState) {
-        if (dataState == newState) return;
         switch (newState) {
             case DATA_AVAILABLE:
                 recyclerView.setVisibility(View.VISIBLE);

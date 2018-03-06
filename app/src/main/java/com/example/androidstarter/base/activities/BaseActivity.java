@@ -87,7 +87,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (!fragmentStack.isEmpty()) {
             tag = fragmentStack.peek();
         }
-//        Timber.v("getCurrentTag returned %s", tag);
         return tag;
+    }
+
+    public String popFragmentBackStack() {
+        if (!fragmentStack.isEmpty()) {
+            return fragmentStack.pop();
+        }
+        return null;
     }
 }

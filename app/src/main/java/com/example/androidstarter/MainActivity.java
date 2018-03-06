@@ -1,9 +1,11 @@
 package com.example.androidstarter;
 
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
@@ -17,6 +19,7 @@ import com.example.androidstarter.data.database.AppDatabase;
 import com.example.androidstarter.data.database.UserDao;
 import com.example.androidstarter.data.models.Task;
 import com.example.androidstarter.data.models.User;
+import com.example.androidstarter.task.TaskFragment;
 import com.example.androidstarter.tasks.TasksContract;
 import com.example.androidstarter.tasks.TasksFragment;
 import com.mikepenz.materialdrawer.Drawer;
@@ -63,8 +66,9 @@ public class MainActivity extends WidgetActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                fab.setVisibility(View.GONE);
+                TaskFragment fragment = new TaskFragment();
+                replaceFragment(R.id.fragment, fragment, TaskFragment.class.getSimpleName(), true);
             }
         });
     }
@@ -110,6 +114,21 @@ public class MainActivity extends WidgetActivity {
         else if (tag.equals(TasksFragment.class.getSimpleName())) {
             Timber.d("finish called.");
             finish();
+        }
+        else if (tag.equals(TaskFragment.class.getSimpleName())) {
+            new AlertDialog.Builder(this)
+                    .setMessage("Are you sure you want to go back? " +
+                            "You will lose unsaved changes.")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            MainActivity.super.onBackPressed();
+                            fab.setVisibility(View.VISIBLE);
+                            popFragmentBackStack();
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
         }
     }
 

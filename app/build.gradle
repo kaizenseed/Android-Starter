@@ -58,12 +58,13 @@ dependencies {
     implementation "com.jakewharton.threetenabp:threetenabp:$rootProject.threeTenAbpVersion"
 
     //Material Drawer as replacement for std NavigationView + Drawerlayout
-    implementation('com.mikepenz:materialdrawer:5.2.0@aar') {
+    implementation('com.mikepenz:materialdrawer:6.0.6@aar') {
         transitive = true
     }
     //icons set available as library
-//    implementation "com.mikepenz:iconics-core:3.0.2@aar"
+    implementation "com.mikepenz:iconics-views:3.0.3@aar"
     implementation 'com.mikepenz:google-material-typeface:3.0.1.2.original@aar'
+    implementation 'com.mikepenz:fontawesome-typeface:4.7.0.1@aar'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
