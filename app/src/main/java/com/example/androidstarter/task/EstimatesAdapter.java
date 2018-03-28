@@ -98,4 +98,13 @@ public class EstimatesAdapter extends RecyclerView.Adapter<EstimatesAdapter.View
         }
         return estimates.get(position);
     }
+
+    public Long getSelectedEstimate() {
+        if (selectedIndex != -1) {
+            return getItem(selectedIndex);
+        }
+        else {
+            return 0l;
+        }
+    }
 }

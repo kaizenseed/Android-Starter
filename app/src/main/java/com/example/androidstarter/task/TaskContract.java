@@ -11,6 +11,7 @@ public interface TaskContract {
     // The plan is to reuse the same for creating and editing a task
     interface View {
         void showTask(Task task);
+        void taskSaved();
     }
     interface Presenter extends BasePresenter<TaskContract.View> {
         void getTask(long taskId);

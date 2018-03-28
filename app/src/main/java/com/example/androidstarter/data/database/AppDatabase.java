@@ -120,7 +120,7 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
             //add delay to ensure dbInstance has been instantiated on return of buildDatabase call
-            addDelay();
+            Timber.d("FreshDbGenerateAsync doInBackground begin");
             // Generate the data for pre-population
             List<Task> tasks = DataGenerator.generateTasks();
 
@@ -131,6 +131,7 @@ public abstract class AppDatabase extends RoomDatabase {
             AppDatabase.getInstance(mContext).userDao().insert(user);
             // notify that the database was created and it's ready to be used
             AppDatabase.getInstance(mContext).setDatabaseCreated();
+            Timber.d("FreshDbGenerateAsync doInBackground end");
             return null;
         }
     }
@@ -144,6 +145,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            addDelay();
             if (appDatabase.userDao().countAll() == 0) {
                 Timber.d("Insert user entry in db");
                 User user = new User("Samvedana Bajpai");

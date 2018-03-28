@@ -24,6 +24,6 @@
         \nConfirm your internet connectivity and try again.</string>
     <string name="retry">Retry</string>
     <!--fragment_task_detail.xml-->
-    <string name="task_input_hint">Task Description</string>
+    <string name="task_input_hint">Task Description *</string>
     <string name="save">Save</string>
 </resources>

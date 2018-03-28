@@ -1,5 +1,6 @@
 package com.example.androidstarter.task;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -8,8 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.androidstarter.MyApplication;
 import com.example.androidstarter.R;
@@ -36,6 +39,7 @@ public class TaskFragment extends Fragment implements TaskContract.View {
 
     TaskPresenter presenter;
     EstimatesAdapter adapter;
+    View view;
 
 
     public TaskFragment() {
@@ -60,6 +64,25 @@ public class TaskFragment extends Fragment implements TaskContract.View {
         estimatesRecyclerView.setAdapter(adapter);
         // do other adapter + recyclerView tasks like setting onClickListeners, paging, swiping etc
 
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String taskDescription = taskEditText.getText().toString();
+                if (taskDescription.equals("")) {
+                    Toast toast = Toast.makeText(getContext(),
+                            "Task description is a required field", Toast.LENGTH_LONG);
+                    toast.show();
+                    return;
+                }
+                long taskEstimate = adapter.getSelectedEstimate();
+//                Timber.d("description %s, estimate %d minutes", taskDescription, taskEstimate);
+                Task t = new Task(taskDescription, taskEstimate);
+                showLoader();
+                presenter.saveTask(t);
+            }
+        });
+
+        this.view = view;
         return view;
     }
 
@@ -71,5 +94,29 @@ public class TaskFragment extends Fragment implements TaskContract.View {
     @Override
     public void showTask(Task task) {
 
+    }
+
+    public void showLoader() {
+
+    }
+
+    public void dismissLoader() {
+
+    }
+
+    public void taskSaved() {
+        dismissLoader();
+        //return to previous screen
+        hideSoftKeyboard(this.view);
+        getFragmentManager().popBackStackImmediate();
+    }
+
+    public static void hideSoftKeyboard(View view) {
+        if (view != null) {
+            InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (inputManager != null) {
+                inputManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        }
     }
 }

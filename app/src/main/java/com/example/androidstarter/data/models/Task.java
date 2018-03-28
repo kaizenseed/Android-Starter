@@ -2,6 +2,7 @@ package com.example.androidstarter.data.models;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 import com.example.androidstarter.data.Config;
 
@@ -13,7 +14,7 @@ import com.example.androidstarter.data.Config;
 public class Task {
     @PrimaryKey(autoGenerate = true) public long id;
 
-    private String description;
+    @NonNull private String description;
     private long estimate; //estimated time to complete in
 
     public Task(String description, long estimate) {
