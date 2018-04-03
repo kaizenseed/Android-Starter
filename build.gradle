@@ -33,7 +33,7 @@ ext {
     compileSdkVersion = 27
 
     // Dependencies
-    supportVersion = '27.0.2'
+    supportVersion = '27.1.0'
     constraintLayoutVersion = '1.0.2'
     archVersion = '1.0.0'
     timberVersion = "4.6.0"

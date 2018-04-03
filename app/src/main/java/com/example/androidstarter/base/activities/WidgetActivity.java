@@ -8,10 +8,7 @@ import android.view.View;
 
 import com.example.androidstarter.R;
 import com.example.androidstarter.base.activities.behaviours.WidgetsAvailable;
-//import com.mikepenz.iconics.context.IconicsLayoutInflater2;
 import com.mikepenz.iconics.context.IconicsLayoutInflater2;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,8 +43,9 @@ public abstract class WidgetActivity extends BaseActivity implements
         }
 
         if (toolbarExists() && navDrawerExists()) {
-            configureNavDrawer();
-            //since this is done programmatically, just skip the step if not used
+            // for nav drawers with profile headers, proper config would require db access
+            // which is handled later. So maybe all LiveData & ViewModel code should go in here
+            configureNavDrawer(this);
         }
     }
 
