@@ -3,9 +3,12 @@ package com.example.androidstarter.tasks;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 
 import com.example.androidstarter.custom.DataViewState;
 import com.example.androidstarter.data.database.AppDatabase;
@@ -29,6 +32,7 @@ public class TasksPresenter implements TasksContract.Presenter, LifecycleObserve
         Timber.d("TasksPresenter constructor");
         appDatabase = database;
         attachView(view);
+        loadTasks(false);
     }
 
     public  static TasksPresenter getInstance(AppDatabase database, TasksContract.View view) {
@@ -56,7 +60,7 @@ public class TasksPresenter implements TasksContract.Presenter, LifecycleObserve
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void onAttach() {
         Timber.d("ON_RESUME event");
-        loadTasks(false);
+        //loadTasks(false);
     }
 
     @Override
@@ -73,41 +77,28 @@ public class TasksPresenter implements TasksContract.Presenter, LifecycleObserve
     public void loadTasks(boolean onlineRequired) {
         Timber.d("in loadTasks");
         //query db for tasks
-        new QueryAsync(appDatabase, tasksView).execute();
-    }
+        LiveData<List<Task>> tasksLiveData = appDatabase.taskDao().getAll();
 
-    private static class QueryAsync extends AsyncTask<Void, Void, List<Task>> {
-        private AppDatabase appDatabase;
-        private TasksContract.View tasksView;
+        // Create the observer which updates the UI.
+        final Observer<List<Task>> observer = new Observer<List<Task>>() {
+            @Override
+            public void onChanged(@Nullable final List<Task> taskList) {
+                Timber.d("Task list updated fromdb");
+                // Update the UI
+                if (taskList == null) {
+                    Timber.e("empty task list instance from db");
+                    tasksView.switchState(DataViewState.NO_DATA);
+                    return; //this is error or no data condition todo communicate better
+                }
+                //tasksView.stopLoadingIndicator();
+                // no longer needs to be handled since state changes will be handled in showTasks
+                tasksView.showTasks(taskList);
 
-
-        QueryAsync(AppDatabase db, TasksContract.View view) {
-            appDatabase = db;
-            tasksView = view;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //Perform pre-adding operation here.
-        }
-
-        @Override
-        protected List<Task> doInBackground(Void... voids) {
-            return appDatabase.taskDao().getAll();
-        }
-
-        @Override
-        protected void onPostExecute(List<Task> taskList) {
-            if (taskList == null) {
-                Timber.e("empty task list instance from db");
-                tasksView.switchState(DataViewState.NO_DATA);
-                return; //this is error or no data condition todo communicate better
             }
-            //tasksView.stopLoadingIndicator();
-            // no longer needs to be handled since state changes will be handled in showTasks
-            tasksView.showTasks(taskList);
-        }
+        };
+
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        tasksLiveData.observe(tasksView, observer);
     }
 
 }

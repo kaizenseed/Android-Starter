@@ -17,10 +17,10 @@ import java.util.List;
 @Dao
 public interface TaskDao {
     @Query("SELECT * FROM " + Config.TASKS_TABLE_NAME)
-    public List<Task> getAll();
+    public LiveData<List<Task>> getAll();
 
     @Query("SELECT * FROM " + Config.TASKS_TABLE_NAME + " WHERE id == :id")
-    public Task getById(int id);
+    public LiveData<Task> getById(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Task task);

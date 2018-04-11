@@ -1,5 +1,7 @@
 package com.example.androidstarter.tasks;
 
+import android.arch.lifecycle.LifecycleOwner;
+
 import com.example.androidstarter.base.BasePresenter;
 import com.example.androidstarter.custom.DataStateViewChanges;
 import com.example.androidstarter.data.models.Task;
@@ -11,7 +13,7 @@ import java.util.List;
  */
 
 public interface TasksContract {
-    interface View extends DataStateViewChanges {
+    interface View extends DataStateViewChanges, LifecycleOwner {
         void showTasks(List<Task> tasks);
     }
 

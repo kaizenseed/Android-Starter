@@ -6,13 +6,8 @@ import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.os.AsyncTask;
 
-import com.example.androidstarter.custom.DataViewState;
 import com.example.androidstarter.data.database.AppDatabase;
 import com.example.androidstarter.data.models.Task;
-import com.example.androidstarter.tasks.TasksContract;
-import com.example.androidstarter.tasks.TasksPresenter;
-
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -27,7 +22,7 @@ public class TaskPresenter implements TaskContract.Presenter, LifecycleObserver 
     private static TaskContract.View taskView;
 
     private TaskPresenter(AppDatabase database, TaskContract.View view) {
-        Timber.d("TasksPresenter constructor");
+        Timber.d("TaskPresenter constructor");
         appDatabase = database;
         attachView(view);
     }
