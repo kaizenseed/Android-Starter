@@ -4,17 +4,12 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.OnLifecycleEvent;
-import android.os.AsyncTask;
 
 import com.example.androidstarter.data.database.AppDatabase;
 import com.example.androidstarter.data.models.Task;
 
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
-import io.reactivex.Single;
-import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -80,7 +75,6 @@ public class TaskPresenter implements TaskContract.Presenter, LifecycleObserver 
     @Override
     public void saveTask(Task task) {
         Timber.d("in saveTask");
-        //new TaskPresenter.SaveAsync(appDatabase, taskView).execute(task);
 
         Observable.just(task)
                 .map((t)->{
