@@ -26,7 +26,7 @@ import static com.example.androidstarter.data.Config.USERS_TABLE_NAME;
  * Created by samvedana on 14/12/17.
  */
 
-@Database(entities = {Task.class, User.class}, version = 2)
+@Database(entities = {Task.class, User.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase dbInstance;
     private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
@@ -59,17 +59,15 @@ public abstract class AppDatabase extends RoomDatabase {
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         Timber.d("buildDatabase : onCreate db version %d", db.getVersion());
                         super.onCreate(db);
-                        new FreshDbGenerateAsync(appContext).execute();
                     }
 
                     @Override
                     public void onOpen(@NonNull SupportSQLiteDatabase db) {
                         Timber.d("buildDatabase : onOpen db version %d", db.getVersion());
                         super.onOpen(db);
-                        new QueryAsync(AppDatabase.getInstance(appContext)).execute();
+                        new FreshDbGenerateAsync(appContext).execute();
                     }
                 })
-                .addMigrations(MIGRATION_1_2)
                 .build();
     }
 
@@ -95,20 +93,6 @@ public abstract class AppDatabase extends RoomDatabase {
             setDatabaseCreated();
         }
     }
-    /*
-    Migrations for Room
-     */
-
-    private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
-        @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
-            Timber.d("migrate : %d to %d version", this.startVersion, this.endVersion);
-            // Create the new Users table
-            String query = "CREATE TABLE " + USERS_TABLE_NAME + " (`id` INTEGER NOT NULL, "
-                            + "`name` TEXT, PRIMARY KEY(`id`))";
-            database.execSQL(query);
-        }
-    };
 
     private static class FreshDbGenerateAsync extends AsyncTask<Void, Void, Void> {
         private Context mContext;
@@ -132,25 +116,6 @@ public abstract class AppDatabase extends RoomDatabase {
             // notify that the database was created and it's ready to be used
             AppDatabase.getInstance(mContext).setDatabaseCreated();
             Timber.d("FreshDbGenerateAsync doInBackground end");
-            return null;
-        }
-    }
-
-    private static class QueryAsync extends AsyncTask<Void, Void, Void> {
-        private AppDatabase appDatabase;
-
-        QueryAsync(AppDatabase db) {
-            appDatabase = db;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            addDelay();
-            if (appDatabase.userDao().countAll() == 0) {
-                Timber.d("Insert user entry in db");
-                User user = new User("Samvedana Bajpai");
-                appDatabase.userDao().insert(user);
-            }
             return null;
         }
     }
