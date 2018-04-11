@@ -9,6 +9,13 @@ import android.os.AsyncTask;
 import com.example.androidstarter.data.database.AppDatabase;
 import com.example.androidstarter.data.models.Task;
 
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -73,31 +80,21 @@ public class TaskPresenter implements TaskContract.Presenter, LifecycleObserver 
     @Override
     public void saveTask(Task task) {
         Timber.d("in saveTask");
-        //query db for tasks
-        new TaskPresenter.SaveAsync(appDatabase, taskView).execute(task);
-    }
+        //new TaskPresenter.SaveAsync(appDatabase, taskView).execute(task);
 
-    private static class SaveAsync extends AsyncTask<Task, Void, Void> {
-        private AppDatabase appDatabase;
-        private TaskContract.View taskView;
-
-
-        SaveAsync(AppDatabase db, TaskContract.View view) {
-            appDatabase = db;
-            taskView = view;
-        }
-
-        @Override
-        protected Void doInBackground(Task... params) {
-            Task t = params[0];
-            appDatabase.taskDao().insert(t);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            taskView.taskSaved();
-        }
+        Observable.just(task)
+                .map((t)->{
+                    appDatabase.taskDao().insert(t);
+                    return t;
+                })
+//                .doOnNext((c)-> {
+//                    Timber.d("processing item on thread " + Thread.currentThread().getName());
+//                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((ignored)->{
+//                    Timber.d("observing result on thread " + Thread.currentThread().getName());
+                    taskView.taskSaved();
+                });
     }
 }
