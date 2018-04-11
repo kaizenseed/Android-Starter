@@ -5,22 +5,20 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-import com.example.androidstarter.custom.DataViewState;
 import com.example.androidstarter.data.models.Task;
 import com.example.androidstarter.data.models.User;
-import com.example.androidstarter.tasks.TasksContract;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 import static com.example.androidstarter.data.Config.DATABASE_NAME;
-import static com.example.androidstarter.data.Config.USERS_TABLE_NAME;
 
 /**
  * Created by samvedana on 14/12/17.
@@ -65,7 +63,22 @@ public abstract class AppDatabase extends RoomDatabase {
                     public void onOpen(@NonNull SupportSQLiteDatabase db) {
                         Timber.d("buildDatabase : onOpen db version %d", db.getVersion());
                         super.onOpen(db);
-                        new FreshDbGenerateAsync(appContext).execute();
+                        Observable.fromCallable(()->{
+                            Timber.d("data generation begin");
+                            List<Task> tasks = DataGenerator.generateTasks();
+
+                            //Create User
+                            User user = new User("Samvedana Bajpai");
+
+                            insertData(AppDatabase.getInstance(appContext), tasks);
+                            AppDatabase.getInstance(appContext).userDao().insert(user);
+                            // notify that the database was created and it's ready to be used
+                            AppDatabase.getInstance(appContext).setDatabaseCreated();
+                            Timber.d("data generation end");
+                            return true;
+                        }).doOnNext((c)-> {
+                            Timber.d("processing item on thread " + Thread.currentThread().getName());
+                        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe();
                     }
                 })
                 .build();
@@ -81,44 +94,10 @@ public abstract class AppDatabase extends RoomDatabase {
         });
     }
 
-    private static void addDelay() {
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException ignored) {
-        }
-    }
-
     private void updateDatabaseCreated(final Context context) {
         if (context.getDatabasePath(DATABASE_NAME).exists()) {
             setDatabaseCreated();
         }
     }
-
-    private static class FreshDbGenerateAsync extends AsyncTask<Void, Void, Void> {
-        private Context mContext;
-
-        FreshDbGenerateAsync(Context context) {
-            mContext = context;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            //add delay to ensure dbInstance has been instantiated on return of buildDatabase call
-            Timber.d("FreshDbGenerateAsync doInBackground begin");
-            // Generate the data for pre-population
-            List<Task> tasks = DataGenerator.generateTasks();
-
-            //Create User
-            User user = new User("Samvedana Bajpai");
-
-            insertData(AppDatabase.getInstance(mContext), tasks);
-            AppDatabase.getInstance(mContext).userDao().insert(user);
-            // notify that the database was created and it's ready to be used
-            AppDatabase.getInstance(mContext).setDatabaseCreated();
-            Timber.d("FreshDbGenerateAsync doInBackground end");
-            return null;
-        }
-    }
-
 }
 
