@@ -34,14 +34,13 @@ dependencies {
     //android architecture components
     // https://developer.android.com/topic/libraries/architecture/adding-components.html
     // Lifecycle arch : ViewModel + LiveData
-    implementation "android.arch.lifecycle:extensions:$rootProject.archVersion"
+    implementation "android.arch.lifecycle:extensions:1.1.1"
     // Java8 support for Lifecycle instead of lifecycle.compiler
-    implementation "android.arch.lifecycle:common-java8:$rootProject.archVersion"
-    //annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archVersion"
+    implementation "android.arch.lifecycle:common-java8:1.1.1"
 
     // Room
-    implementation "android.arch.persistence.room:runtime:$rootProject.archVersion"
-    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.archVersion"
+    implementation "android.arch.persistence.room:runtime:1.0.0"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
 
     //ToNote - paging, test helpers for LiveData & Room also available. Add when needed
     //ToNote - RoomRxJava & LiveData ReactiveStreams support available separately.
@@ -61,6 +60,7 @@ dependencies {
     implementation('com.mikepenz:materialdrawer:6.0.6@aar') {
         transitive = true
     }
+
     //icons set available as library
     implementation "com.mikepenz:iconics-views:3.0.3@aar"
     implementation 'com.mikepenz:google-material-typeface:3.0.1.2.original@aar'

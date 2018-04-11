@@ -1,5 +1,6 @@
 package com.example.androidstarter.data.database;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
@@ -18,10 +19,10 @@ import java.util.List;
 @Dao
 public interface UserDao {
     @Query("SELECT * FROM " + Config.USERS_TABLE_NAME)
-    public List<User> getAll();
+    public LiveData<List<User>> getAll();
 
     @Query("SELECT * FROM " + Config.USERS_TABLE_NAME + " WHERE id == :id")
-    public User getById(int id);
+    public LiveData<User> getById(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(User user);
@@ -34,4 +35,8 @@ public interface UserDao {
 
     @Query("SELECT COUNT(*) FROM " + Config.USERS_TABLE_NAME)
     int countAll();
+
+    //specifically for getting a user for nav drawer. The logic would likely be different for an actual app
+    @Query("SELECT * FROM " + Config.USERS_TABLE_NAME + " LIMIT 1")
+    public LiveData<User> getMyUser();
 }

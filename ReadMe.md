@@ -8,7 +8,7 @@ This is a simple project that serves two purposes for me :
 
 The project
 - follows the MVP pattern.
-- utilises some android architecture components, namely, Room, Lifecysle aware owners and observers
+- utilises some android architecture components, namely, Room, LiveData, Lifecysle aware owners and observers
 
 
 Common Libraries used (apart from android support and design libraries etc)

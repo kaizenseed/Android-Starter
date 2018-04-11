@@ -1,33 +1,22 @@
 package com.example.androidstarter;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-import com.example.androidstarter.base.activities.BaseActivity;
 import com.example.androidstarter.base.activities.WidgetActivity;
-import com.example.androidstarter.custom.DataViewState;
 import com.example.androidstarter.custom.MaterialDrawerHelper;
-import com.example.androidstarter.data.database.AppDatabase;
-import com.example.androidstarter.data.database.UserDao;
-import com.example.androidstarter.data.models.Task;
 import com.example.androidstarter.data.models.User;
 import com.example.androidstarter.task.TaskFragment;
-import com.example.androidstarter.tasks.TasksContract;
 import com.example.androidstarter.tasks.TasksFragment;
 import com.mikepenz.materialdrawer.Drawer;
 
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class MainActivity extends WidgetActivity {
@@ -78,8 +67,25 @@ public class MainActivity extends WidgetActivity {
     }
 
     @Override
-    public void configureNavDrawer() {
-        new QueryAsync(getMyApplication().getDatabase(), this).execute();
+    public void configureNavDrawer(WidgetActivity activity) {
+        Timber.d("in configureNavDrawer");
+        LiveData<User> user = getMyApplication().getDatabase().userDao().getMyUser();
+
+        // Create the observer which updates the UI.
+        final Observer<User> userObserver = new Observer<User>() {
+            @Override
+            public void onChanged(@Nullable final User newUser) {
+                Timber.d("User changed to %s", user.toString());
+                // Update the UI, in this case, a nav drawer header.
+                setMainDrawer(MaterialDrawerHelper.configureStdNavDrawer(activity,
+                        toolbar, newUser));
+
+            }
+        };
+
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        user.observe(this, userObserver);
+
     }
 
     @Override
@@ -130,41 +136,5 @@ public class MainActivity extends WidgetActivity {
                     .setNegativeButton("No", null)
                     .show();
         }
-    }
-
-    private static class QueryAsync extends AsyncTask<Void, Void, User> {
-        private AppDatabase appDatabase;
-        private MainActivity activity;
-
-        QueryAsync(AppDatabase db, MainActivity activity) {
-            appDatabase = db;
-            this.activity = activity;
-        }
-
-        @Override
-        protected User doInBackground(Void... voids) {
-            List<User> users = appDatabase.userDao().getAll();
-            /*
-            Ideally should directly do get(0) but due to asyncs used for updating db data
-            in migrations, onUpgrade & onOpen, mainActivity reaches here before db has finished building
-            The right approach would be
-            - to use some kind of an eventbus/rxJava to ensure ordering
-            - have a better way of loading initial data.
-            this issue comes up on directly upgrading from app at DB_V1 tag to here
-            => when db upgrade + user adding to db is
-            happening along with user being needed for profile in material drawer
-             */
-            if (users.size() == 0) return null;
-            else {
-                return users.get(0);
-            }
-        }
-
-        @Override
-        protected void onPostExecute(User user) {
-            activity.setMainDrawer(MaterialDrawerHelper.configureStdNavDrawer(activity,
-                    activity.toolbar, user));
-        }
-
     }
 }
